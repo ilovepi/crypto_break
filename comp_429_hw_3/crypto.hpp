@@ -143,8 +143,8 @@ public:
 	static std::vector<std::string> shift(std::string str);
 	static std::vector<int> get_freq(std::string str);
 	static void transpose(std::string str);
-	scores freq_list(std::string s);
-	std::vector<std::string> remapper(std::string str)
+	static scores freq_list(std::string s);
+	static std::vector<std::string> remapper(std::string str);
 };
 
 

@@ -1,28 +1,15 @@
 #include "crypto.hpp"
 
-
-
-
-
-
-
 int main()
 {
 	std::ofstream f("perms.txt");
 	f.close();
-	
-	std::string   msg = /*"GDKKNVNQKC"*/ "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
+	crypto solver;
+	std::string   msg = "GDKKNVNQKC";// "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
 		
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
-	auto comp = [](std::pair<char, int> x, std::pair<char, int> y){return x.second > y.second; };
 	
-	/*
-	auto fl = freq_list(msg);
-	std::sort(fl.begin(), fl.end(), comp);
-	for (auto item : fl)
-		std::cout << item.first << " " << item.second << std::endl;
-		*/
-	auto mapped = remapper(msg);
+	auto mapped = crypto::remapper(msg);
 	
 
 	//system("pause");
@@ -39,7 +26,7 @@ int main()
 		else
 			std::cout << s << std::endl;
 		*/
-		transpose(s);		
+		crypto::transpose(s);		
 	}
 	
 	//transpose(shifted[0]);
