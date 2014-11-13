@@ -7,7 +7,11 @@
 
 crypto::crypto() 
 {
-	
+	std::ifstream infile("dictionary.txt");
+	std::string word;
+	while (getline(infile, word))
+		dict.emplace(word, word.size()*word.size());
+	infile.close();
 }
 
 std::string crypto::str_inc(const std::string& input, int i)
@@ -20,7 +24,7 @@ std::string crypto::str_inc(const std::string& input, int i)
 	return str;
 }
 
-std::vector<std::string> crypto::shift(std::string str)
+std::vector<std::string> crypto::shift(const std::string& str)
 {
 	auto increment = [](char c, int i){return (char)('a' + ((c - 'A' + i) % 26)); };
 	std::vector<std::string> str_vec;
@@ -63,7 +67,7 @@ return str;
 }
 */
 
-
+/*
 std::vector<std::future<bool>> crypto::make_vec(std::vector<std::string> vec, std::string str)
 {
 	//std::function<std::atomic<bool(std::string, std::string)>> f
@@ -73,13 +77,14 @@ std::vector<std::future<bool>> crypto::make_vec(std::vector<std::string> vec, st
 	futs.reserve(vec.size());
 	for (auto word : vec)
 		futs.push_back(std::async(std::launch::async, std::bind(f, word, str)));
-	/*
-	for (auto f = futs.begin(); f != futs.end(); ++f)
-	f->get();
-	*/
+	
+	//for (auto f = futs.begin(); f != futs.end(); ++f)
+	//f->get();
+	
 	return futs;
 }
-
+*/
+/*
 crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 {
 	auto ret = &whole;
@@ -102,9 +107,9 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 	std::sort(ret->begin(), ret->end(), comp);
 	return *ret;
 }
+*/
 
-
-std::vector<int> crypto::get_freq(std::string str)
+std::vector<int> crypto::get_freq(const std::string& str)
 {
 	std::vector<int> freq(26, 0);
 	for (int i = 0; i < str.size(); ++i)
@@ -112,7 +117,8 @@ std::vector<int> crypto::get_freq(std::string str)
 	return freq;
 }
 
-bool crypto::check_tops(std::vector<int> freqs)
+/*
+bool crypto::check_tops(const std::vector<int>& freqs)
 {
 	auto m = std::max_element(freqs.begin(), freqs.end());
 	for (char c : top_alpha)
@@ -122,8 +128,9 @@ bool crypto::check_tops(std::vector<int> freqs)
 	}
 	return false;
 }
+*/
 
-void crypto::transpose(std::string str)
+void crypto::transpose(const std::string& str)
 {
 	static int count = 0;
 	auto freqs = get_freq(str);
@@ -147,33 +154,16 @@ void crypto::transpose(std::string str)
 			for (int i = 0; i < pqr.size(); ++i)
 				pqr[i] += str[i + rows];
 		}
-
-
-
-
+		
 		while (std::next_permutation(indexes.begin(), indexes.end()))
-		{
-			//auto p = column_switch(pqr, indexes);
+		{			
 			std::string word;
 			for (int i = 0; i < indexes.size(); ++i)
 				word += pqr[i];
 
-			auto hits = 0;
-			auto x = make_vec(lst, word);
-
-			for (auto it = x.begin(); it != x.end(); ++it)
-			{
-				bool go = false;
-				if (it->get())
-				{
-					go = true;
-					++hits;
-				}//end if
-
-				if (go)
-					ord.emplace_back(hits, word);
-			}//end for
-
+			auto score = get_scores(word);
+			if (score > 0)
+				ord.emplace_back(score, word);
 		} // end while	
 		std::sort(ord.begin(), ord.end(), [](const std::pair<int, std::string> &x, const std::pair<int, std::string> &y){return x.first > y.first; });
 		writer = top(ord, writer, 1000);
@@ -185,19 +175,9 @@ void crypto::transpose(std::string str)
 	printf("Finished %d \n", count);
 }
 
-/*
-std::vector<std::string> maper(std::string s)
-{
-auto freqs = get_freq(s);
-std::max_element(freqs.begin(), freqs.end());
-for (char c : top_alpha)
-{
 
-}
-}
-*/
 
-crypto::scores crypto::freq_list(std::string s)
+crypto::scores crypto::freq_list(const std::string &s)
 {
 	auto comp = [](score x, score y){return x.first > y.first; };
 	scores freq;
@@ -210,45 +190,71 @@ crypto::scores crypto::freq_list(std::string s)
 	return freq;
 }
 
-
-std::vector<std::string> crypto::remapper(std::string str)
+/* can we multi thread this?? maybe write it to file???*/
+std::vector<std::string> crypto::remapper(const std::string& str)
 {
-
-	auto freqs = freq_list(str);
+	//std::string alpha = "abcdefghijklmnopqrstuvwxyz";
+	std::string code = "abcdefghijklmnopqrstuvwxyz";
+	scores freqs;
 	std::vector<std::string> words;
 	std::string temp;
-	while (std::next_permutation(top_alpha.begin(), top_alpha.end()))
+	while (std::next_permutation(code.begin(), code.end()))
 	{
-		/*
-		for (char c : top_alpha)
-		std::cout << c;
-		std::cout << std::endl <<std::endl;
-		*/
 		temp = str;
-		for (int i = 0; i < top_alpha.size(); ++i)
+		for (int j = 0; j < str.size(); ++j)		
+			temp[j] = code[temp[j] - 'a'];		
+
+		freqs = freq_list(temp);				
+		bool good_dist = true; //ture if freq dist is close to english (same top 9 letters
+		for (int i = 0; good_dist && i < top_alpha.size() ; ++i)
 		{
-			for (int j = 0; j < str.size(); ++j)
-			{
-				if (freqs[i].first == str[j])
-					temp[j] = top_alpha[i];
-			}
+			if (top_alpha.find(freqs[i].second) == std::string::npos)
+				good_dist = false;
 		}
-		words.push_back(temp);
+		if (good_dist)
+			words.push_back(temp);		
 	}
 	return words;
 }
 
-
-
-size_t crypto::get_scores(const char* str, size_t n)
-{
-
-
-}
-
-
-
 size_t crypto::get_scores(const std::string& str)
+{ return get_scores(str, 0); }
+
+
+/* This needs multi threading !!!!!*/
+size_t crypto::get_scores(const std::string& str, size_t pos)
 {
-	return get_scores(str.c_str, str.size());
+	size_t ret= 0, temp = 0, m= 1; //return value	
+	std::string window = str.substr(pos, m);
+	//lock hash
+	auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
+	bool in_hash = it== hash.end(); //<-- not thread safe	
+	if (!in_hash)  //<-- not thread safe
+	{
+		//unlock hash
+		while (m < (str.size() - pos))
+		{			
+			if (dict.find(window) != dict.end())
+			{
+				temp = (m*m + get_scores(str, pos + m));
+				if (ret < temp)
+					ret = temp;
+			}
+			++m;
+			window += str[pos + m];
+		}
+				
+		//lock hash
+		auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
+		if (it == hash.end() || (it->second < ret))
+			hash.emplace(str.substr(pos, str.size()), ret);  //<-- not thread safe. need a mutex
+		//unlock hash
+	}
+	else
+	{
+		ret = it->second;
+		//unlock hash
+	}	
+
+	return ret;
 }

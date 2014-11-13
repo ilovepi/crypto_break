@@ -9,7 +9,7 @@ int main()
 		
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 	
-	auto mapped = crypto::remapper(msg);
+	auto mapped = solver.remapper(msg);
 	
 
 	//system("pause");
