@@ -1,9 +1,4 @@
-#include "crypto.hpp";
-
-
-
-//#include<sstream>
-
+#include "crypto.hpp"
 
 crypto::crypto() 
 {
@@ -84,7 +79,7 @@ std::vector<std::future<bool>> crypto::make_vec(std::vector<std::string> vec, st
 	return futs;
 }
 */
-/*
+
 crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 {
 	auto ret = &whole;
@@ -107,7 +102,7 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 	std::sort(ret->begin(), ret->end(), comp);
 	return *ret;
 }
-*/
+
 
 std::vector<int> crypto::get_freq(const std::string& str)
 {
@@ -117,7 +112,7 @@ std::vector<int> crypto::get_freq(const std::string& str)
 	return freq;
 }
 
-/*
+
 bool crypto::check_tops(const std::vector<int>& freqs)
 {
 	auto m = std::max_element(freqs.begin(), freqs.end());
@@ -128,7 +123,7 @@ bool crypto::check_tops(const std::vector<int>& freqs)
 	}
 	return false;
 }
-*/
+
 
 void crypto::transpose(const std::string& str)
 {
@@ -139,7 +134,7 @@ void crypto::transpose(const std::string& str)
 
 
 	std::ofstream file("perms.txt", std::ofstream::app);
-	int size = str.size();
+	size_t size = str.size();
 	auto factors = prime_factors(size);
 	std::vector<std::pair<int, std::string>> ord, writer;
 	for (auto rows : factors)
@@ -181,9 +176,10 @@ crypto::scores crypto::freq_list(const std::string &s)
 {
 	auto comp = [](score x, score y){return x.first > y.first; };
 	scores freq;
-	char c = 'a';
-	for (int i = 0; i < 26; ++i, ++c)
-		freq.emplace_back(c, 0);
+	std::string str = "a";
+	
+	for (int i = 0; i < 26; ++i, ++str[0])
+		freq.emplace_back(0, str);
 	for (int i = 0; i < s.size(); ++i)
 		++freq[s[i] - 'a'].first;
 	std::sort(freq.begin(), freq.end(), comp);
@@ -203,10 +199,10 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 		temp = str;
 		for (int j = 0; j < str.size(); ++j)		
 			temp[j] = code[temp[j] - 'a'];		
-
 		freqs = freq_list(temp);				
-		bool good_dist = true; //ture if freq dist is close to english (same top 9 letters
-		for (int i = 0; good_dist && i < top_alpha.size() ; ++i)
+		bool good_dist = true; //true if freq dist is close to english (same top 9 letters-ish)
+		auto limit = std::min(top_alpha.size(), freqs.size());
+		for (int i = 0; good_dist && i < limit; ++i)
 		{
 			if (top_alpha.find(freqs[i].second) == std::string::npos)
 				good_dist = false;
@@ -217,14 +213,14 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 	return words;
 }
 
-size_t crypto::get_scores(const std::string& str)
+int crypto::get_scores(const std::string& str)
 { return get_scores(str, 0); }
 
 
 /* This needs multi threading !!!!!*/
-size_t crypto::get_scores(const std::string& str, size_t pos)
+int crypto::get_scores(const std::string& str, size_t pos)
 {
-	size_t ret= 0, temp = 0, m= 1; //return value	
+	int ret= 0, temp = 0, m= 1; //return value	
 	std::string window = str.substr(pos, m);
 	//lock hash
 	auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
@@ -255,6 +251,5 @@ size_t crypto::get_scores(const std::string& str, size_t pos)
 		ret = it->second;
 		//unlock hash
 	}	
-
 	return ret;
 }

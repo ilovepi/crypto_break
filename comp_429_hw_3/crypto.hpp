@@ -136,9 +136,9 @@ private:
 	static std::vector<int> prime_factors(int n);
 	static std::vector<std::future<bool>> make_vec(std::vector<std::string> vec, std::string str);
 	static scores top(scores &sub, scores &whole, size_t n);
-	static bool check_tops(const std::vector<int> &freqs);
-	size_t get_scores(const std::string& str);
-	size_t get_scores(const std::string& str, size_t n);
+	bool check_tops(const std::vector<int> &freqs);
+	int get_scores(const std::string& str);
+	int get_scores(const std::string& str, size_t n);
 
 
 

@@ -26,7 +26,7 @@ int main()
 		else
 			std::cout << s << std::endl;
 		*/
-		crypto::transpose(s);		
+		solver.transpose(s);		
 	}
 	
 	//transpose(shifted[0]);
