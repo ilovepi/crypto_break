@@ -33,7 +33,7 @@ private:
 	int get_scores(const std::string& str, size_t n);
     static bool comp(const score &x, const score &y);
 
-    
+
 public:
 	crypto();
 	//static std::vector<std::string> shift(const std::string& str);
@@ -43,9 +43,5 @@ public:
 	std::vector<std::string> remapper(const std::string& str);
 
 };
-
-
-
-
 
 #endif

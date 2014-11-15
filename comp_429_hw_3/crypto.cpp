@@ -242,7 +242,7 @@ int crypto::get_scores(const std::string& str, size_t pos)
 		}
 				
 		//lock hash
-		auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
+		it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
 		if (it == hash.end() || (it->second < ret))
 			hash.insert(std::make_pair(str.substr(pos, str.size()), ret));  //<-- not thread safe. need a mutex
 		//unlock hash
