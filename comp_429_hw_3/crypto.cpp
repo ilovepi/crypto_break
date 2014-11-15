@@ -2,6 +2,7 @@
 
 crypto::crypto() 
 {
+    top_alpha = "etaoinshr";
 	std::ifstream infile("dictionary.txt");
 	std::string word;
 	while (getline(infile, word))
@@ -21,14 +22,9 @@ std::string crypto::str_inc(const std::string& input, int i)
 
 std::vector<std::string> crypto::shift(const std::string& str)
 {
-	auto increment = [](char c, int i){return (char)('a' + ((c - 'A' + i) % 26)); };
 	std::vector<std::string> str_vec;
 	for (int i = 0; i < 26; ++i)
-	{
-		//if (std::string::npos == vowel.find(increment('V', i)))
-		//continue;
 		str_vec.push_back(str_inc(str, i));
-	}
 	return str_vec;
 }
 
@@ -158,7 +154,8 @@ void crypto::transpose(const std::string& str)
 
 			auto score = get_scores(word);
 			if (score > 0)
-				ord.emplace_back(score, word);
+				ord.push_back(std::make_pair(score, word));
+
 		} // end while	
 		std::sort(ord.begin(), ord.end(), [](const std::pair<int, std::string> &x, const std::pair<int, std::string> &y){return x.first > y.first; });
 		writer = top(ord, writer, 1000);
@@ -179,7 +176,7 @@ crypto::scores crypto::freq_list(const std::string &s)
 	std::string str = "a";
 	
 	for (int i = 0; i < 26; ++i, ++str[0])
-		freq.emplace_back(0, str);
+		freq.push_back(std::make_pair(0, str));
 	for (int i = 0; i < s.size(); ++i)
 		++freq[s[i] - 'a'].first;
 	std::sort(freq.begin(), freq.end(), comp);

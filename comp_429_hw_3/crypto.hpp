@@ -126,7 +126,7 @@ private:
 */
 
 	
-	std::string top_alpha = "etaoinshr"; //{{ 'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r' } };
+	std::string top_alpha;// = "etaoinshr"; //{{ 'e', 't', 'a', 'o', 'i', 'n', 's', 'h', 'r' } };
 	std::unordered_map<std::string, size_t> hash, dict;
 	
 	
@@ -134,7 +134,7 @@ private:
 	
 	static std::string str_inc(const std::string& input, int i);
 	static std::vector<int> prime_factors(int n);
-	static std::vector<std::future<bool>> make_vec(std::vector<std::string> vec, std::string str);
+	//static std::vector<std::future<bool>> make_vec(std::vector<std::string> vec, std::string str);
 	static scores top(scores &sub, scores &whole, size_t n);
 	bool check_tops(const std::vector<int> &freqs);
 	int get_scores(const std::string& str);
