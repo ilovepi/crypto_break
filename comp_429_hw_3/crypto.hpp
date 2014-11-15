@@ -6,11 +6,11 @@
 #include <algorithm>
 #include <functional>
 #include <fstream>
-#include <future>
+//#include <future>
 #include <array>
 #include <unordered_map>
-#include <set>
-#include <mutex>
+//#include <set>
+//#include <mutex>
 
 
 class crypto
