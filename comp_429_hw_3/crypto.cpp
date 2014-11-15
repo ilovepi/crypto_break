@@ -10,6 +10,7 @@ crypto::crypto()
 	infile.close();
 }
 
+/*
 std::string crypto::str_inc(const std::string& input, int i)
 {
 	auto increment = [i](char c){return (char)('a' + ((c - 'A' + i) % 26)); };
@@ -19,7 +20,8 @@ std::string crypto::str_inc(const std::string& input, int i)
 	//std::cout << str << std::endl;
 	return str;
 }
-
+*/
+/*
 std::vector<std::string> crypto::shift(const std::string& str)
 {
 	std::vector<std::string> str_vec;
@@ -27,7 +29,7 @@ std::vector<std::string> crypto::shift(const std::string& str)
 		str_vec.push_back(str_inc(str, i));
 	return str_vec;
 }
-
+*/
 
 std::vector<int> crypto::prime_factors(int n)
 {

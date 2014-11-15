@@ -132,7 +132,7 @@ private:
 	
 	
 	
-	static std::string str_inc(const std::string& input, int i);
+	//static std::string str_inc(const std::string& input, int i);
 	static std::vector<int> prime_factors(int n);
 	//static std::vector<std::future<bool>> make_vec(std::vector<std::string> vec, std::string str);
 	static scores top(scores &sub, scores &whole, size_t n);
@@ -146,7 +146,7 @@ private:
 
 public:
 	crypto();
-	static std::vector<std::string> shift(const std::string& str);
+	//static std::vector<std::string> shift(const std::string& str);
 	static std::vector<int> get_freq(const std::string& str);
 	void transpose(const std::string& str);
 	static scores freq_list(const std::string& s);
