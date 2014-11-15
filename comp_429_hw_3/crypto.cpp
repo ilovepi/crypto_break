@@ -203,7 +203,7 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 			temp[j] = code[temp[j] - 'a'];		
 		freqs = freq_list(temp);				
 		bool good_dist = true; //true if freq dist is close to english (same top 9 letters-ish)
-		auto limit = std::min(top_alpha.size(), freqs.size());
+		auto limit = std::min(top_alpha.size(), str.size());
 		for (int i = 0; good_dist && i < limit; ++i)
 		{
 			if (top_alpha.find(freqs[i].second) == std::string::npos)
