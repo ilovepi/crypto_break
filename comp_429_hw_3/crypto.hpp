@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <fstream>
+#include <cmath>
 //#include <future>
 #include <array>
 #include <unordered_map>
