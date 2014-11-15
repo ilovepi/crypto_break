@@ -78,10 +78,16 @@ std::vector<std::future<bool>> crypto::make_vec(std::vector<std::string> vec, st
 }
 */
 
+
+bool crypto::comp(const score &x, const score &y)
+{
+    return x.first > y.first;
+}
+
 crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 {
 	auto ret = &whole;
-	auto comp = [](const score &x, const score &y){return x.first > y.first; };
+
 	int i = 0;
 	if (whole.size() < n)
 	{

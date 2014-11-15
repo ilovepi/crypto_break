@@ -139,6 +139,7 @@ private:
 	bool check_tops(const std::vector<int> &freqs);
 	int get_scores(const std::string& str);
 	int get_scores(const std::string& str, size_t n);
+    static bool comp(const score &x, const score &y);
 
 
 
