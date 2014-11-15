@@ -9,14 +9,14 @@ int main()
 		
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 	
-	auto mapped = solver.remapper(msg);
+	//auto mapped = solver.remapper(msg);
 	
 
 	//system("pause");
 
 	//auto shifted = shift(msg);	
-	for (auto it = mapped.begin(); it != mapped.end(); ++it)
-		solver.transpose((*it));
+	//for (auto it = mapped.begin(); it != mapped.end(); ++it)
+		//solver.transpose((*it));
 
 	system("pause");
 	return EXIT_SUCCESS;

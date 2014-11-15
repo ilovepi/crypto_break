@@ -10,7 +10,7 @@
 //#include <future>
 #include <array>
 #include <unordered_map>
-//#include <set>
+#include <map>
 //#include <mutex>
 
 
@@ -18,6 +18,7 @@ class crypto
 {
 	typedef std::pair<int, std::string> score;
 	typedef std::vector<score> scores;
+	typedef std::pair<std::string, int> hash_key;
 
 private:
 
@@ -29,7 +30,7 @@ private:
     /**
     * A hash used for memoization of strings and their scores... could be better
     */
-	std::unordered_map<std::string, size_t> hash;
+	std::map<std::string, size_t> memo;
 
     /**
     * A dictionary of english words
@@ -89,6 +90,9 @@ public:
     */
 	crypto();
 
+	~crypto();
+
+
     /**
     * ceasar cypher shift
     * returns a vector with all possible caesar cyphers of the input string
@@ -115,6 +119,8 @@ public:
     * substitution
     */
 	std::vector<std::string> remapper(const std::string& str);
+
+	void insert_hash(const hash_key& item);
 
 };
 

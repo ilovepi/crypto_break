@@ -8,6 +8,31 @@ crypto::crypto()
 	while (getline(infile, word))
 		dict.insert(std::make_pair(word, word.size()*word.size()));
 	infile.close();
+
+	infile.open("memo.txt");
+	hash_key key;
+	while (!infile.eof())
+	{
+		infile >> key.first >> key.second;
+		memo.insert(key);
+	}
+	printf("Dictionary is %d items large\n\n", dict.size());
+}
+
+crypto::~crypto()
+{
+	std::ofstream outfile("memo.txt");
+	for (auto it = memo.begin(); it != memo.end(); ++it)
+	{
+		outfile << it->first << " " << it->second << std::endl;
+	}
+}
+
+void crypto::insert_hash(const hash_key& item)
+{
+	auto it = memo.find(item.first);
+	if (it == memo.end() || it->second < item.second)
+		memo.insert(item);	
 }
 
 /*
@@ -190,8 +215,7 @@ crypto::scores crypto::freq_list(const std::string &s)
 
 /* can we multi thread this?? maybe write it to file???*/
 std::vector<std::string> crypto::remapper(const std::string& str)
-{
-	//std::string alpha = "abcdefghijklmnopqrstuvwxyz";
+{	
 	std::string code = "abcdefghijklmnopqrstuvwxyz";
 	scores freqs;
 	std::vector<std::string> words;
@@ -228,11 +252,11 @@ int crypto::get_scores(const std::string& str, size_t pos)
 
     std::string window = str.substr(pos, m);
 	//lock hash
-	auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
-	bool in_hash = it== hash.end(); //<-- not thread safe	
+	auto it = memo.find(str.substr(pos, str.size())); //<-- not thread safe
+	bool in_hash = it== memo.end(); //<-- not thread safe	
 	if (!in_hash)  //<-- not thread safe
 	{
-		//unlock hash
+		//unlock memo
 		while (m < (str.size() - pos))
 		{			
 			if (dict.find(window) != dict.end())
@@ -245,16 +269,17 @@ int crypto::get_scores(const std::string& str, size_t pos)
 			window += str[pos + m];
 		}
 				
-		//lock hash
-		it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
-		if (it == hash.end() || (it->second < ret))
-			hash.insert(std::make_pair(str.substr(pos, str.size()), ret));  //<-- not thread safe. need a mutex
-		//unlock hash
+		//lock memo
+		it = memo.find(str.substr(pos, str.size())); //<-- not thread safe
+		if (it == memo.end() || (it->second < ret))
+			memo.insert(std::make_pair(str.substr(pos, str.size()), ret));  //<-- not thread safe. need a mutex
+		//unlock memo
 	}
 	else
 	{
 		ret = it->second;
-		//unlock hash
+		//unlock memo
 	}	
+
 	return ret;
 }
