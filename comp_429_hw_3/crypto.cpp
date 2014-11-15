@@ -10,7 +10,7 @@ crypto::crypto()
 	infile.close();
 
 	infile.open("memo.txt");
-	hash_key key;
+	map_key key;
 	while (!infile.eof())
 	{
 		infile >> key.first >> key.second;
@@ -28,7 +28,7 @@ crypto::~crypto()
 	}
 }
 
-void crypto::insert_hash(const hash_key& item)
+void crypto::insert_hash(const map_key& item)
 {
 	auto it = memo.find(item.first);
 	if (it == memo.end() || it->second < item.second)

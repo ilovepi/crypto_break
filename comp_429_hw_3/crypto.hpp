@@ -18,7 +18,7 @@ class crypto
 {
 	typedef std::pair<int, std::string> score;
 	typedef std::vector<score> scores;
-	typedef std::pair<std::string, int> hash_key;
+	typedef std::pair<std::string, int> map_key;
 
 private:
 
@@ -120,7 +120,7 @@ public:
     */
 	std::vector<std::string> remapper(const std::string& str);
 
-	void insert_hash(const hash_key& item);
+	void insert_hash(const map_key& item);
 
 };
 
