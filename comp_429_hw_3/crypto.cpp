@@ -120,12 +120,8 @@ std::vector<int> crypto::get_freq(const std::string& str)
 bool crypto::check_tops(const std::vector<int>& freqs)
 {
 	auto m = std::max_element(freqs.begin(), freqs.end());
-	for (char c : top_alpha)
-	{
-		if ((*m) == (c - 'a'))
-			return true;
-	}
-	return false;
+    char c = (*m) + 'a';
+	return (top_alpha.find(c) != std::string::npos);
 }
 
 
