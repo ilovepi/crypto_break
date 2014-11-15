@@ -162,7 +162,7 @@ void crypto::transpose(const std::string& str)
 				ord.push_back(std::make_pair(score, word));
 
 		} // end while	
-		std::sort(ord.begin(), ord.end(), [](const std::pair<int, std::string> &x, const std::pair<int, std::string> &y){return x.first > y.first; });
+		std::sort(ord.begin(), ord.end(), comp);
 		writer = top(ord, writer, 1000);
 	}
 	for (auto pair : writer)
