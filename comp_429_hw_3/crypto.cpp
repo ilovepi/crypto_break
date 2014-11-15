@@ -176,7 +176,6 @@ void crypto::transpose(const std::string& str)
 
 crypto::scores crypto::freq_list(const std::string &s)
 {
-	auto comp = [](score x, score y){return x.first > y.first; };
 	scores freq;
 	std::string str = "a";
 	
