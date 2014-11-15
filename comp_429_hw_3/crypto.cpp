@@ -6,7 +6,7 @@ crypto::crypto()
 	std::ifstream infile("dictionary.txt");
 	std::string word;
 	while (getline(infile, word))
-		dict.emplace(word, word.size()*word.size());
+		dict.insert(std::make_pair(word, word.size()*word.size()));
 	infile.close();
 }
 
