@@ -97,7 +97,7 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 	else
 	{
 		auto x = whole;
-		for (int i = 0, j = 0, k = 0; i < n; i++)
+		for (int j = 0, k = 0; i < n; i++)
 		{
 			x[i] = comp(whole[j], sub[k]) ? whole[j++] : sub[k++];
 		}
