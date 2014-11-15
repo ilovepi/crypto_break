@@ -165,8 +165,8 @@ void crypto::transpose(const std::string& str)
 		std::sort(ord.begin(), ord.end(), comp);
 		writer = top(ord, writer, 1000);
 	}
-	for (auto pair : writer)
-		file << pair.second << std::endl;
+	for (auto it = writer.begin(); it != writer.end(); ++it)
+		file << it->second << std::endl;
 	file.close();
 	++count;
 	printf("Finished %d \n", count);
