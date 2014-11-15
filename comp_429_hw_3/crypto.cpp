@@ -137,8 +137,9 @@ void crypto::transpose(const std::string& str)
 	size_t size = str.size();
 	auto factors = prime_factors(size);
 	std::vector<std::pair<int, std::string>> ord, writer;
-	for (auto rows : factors)
+	for (auto it = factors.begin(); it != factors.end(); ++it)
 	{
+        auto rows = (*it);
 		std::vector<int> indexes;
 		for (int i = 0; i < size / rows; ++i)
 			indexes.push_back(i);
