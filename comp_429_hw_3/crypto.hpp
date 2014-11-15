@@ -112,7 +112,7 @@ public:
 	static scores freq_list(const std::string& s);
 
     /**
-    * substitution 
+    * substitution
     */
 	std::vector<std::string> remapper(const std::string& str);
 

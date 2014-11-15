@@ -144,11 +144,11 @@ void crypto::transpose(const std::string& str)
 		for (int i = 0; i < size / rows; ++i)
 			indexes.push_back(i);
 
-		std::vector<std::string> pqr(size / rows), perms;
+		std::vector<std::string> pqr(size / rows);
 		for (int i = 0; i < size / rows; ++i)
 		{
-			for (int i = 0; i < pqr.size(); ++i)
-				pqr[i] += str[i + rows];
+			for (int j = 0; j < rows; ++j)
+				pqr[i] += str[j + i*rows];
 		}
 		
 		while (std::next_permutation(indexes.begin(), indexes.end()))
@@ -180,7 +180,8 @@ crypto::scores crypto::freq_list(const std::string &s)
 	std::string str = "a";
 	
 	for (int i = 0; i < 26; ++i, ++str[0])
-		freq.push_back(std::make_pair(0, str));
+        freq.push_back(std::make_pair(0, str));
+
 	for (int i = 0; i < s.size(); ++i)
 		++freq[s[i] - 'a'].first;
 	std::sort(freq.begin(), freq.end(), comp);
@@ -221,8 +222,11 @@ int crypto::get_scores(const std::string& str)
 /* This needs multi threading !!!!!*/
 int crypto::get_scores(const std::string& str, size_t pos)
 {
-	int ret= 0, temp = 0, m= 1; //return value	
-	std::string window = str.substr(pos, m);
+	int ret= 0;                             // return value
+    int temp = 0;                           // temp value for calc
+    int m = 1; 	                            // window size
+
+    std::string window = str.substr(pos, m);
 	//lock hash
 	auto it = hash.find(str.substr(pos, str.size())); //<-- not thread safe
 	bool in_hash = it== hash.end(); //<-- not thread safe	
