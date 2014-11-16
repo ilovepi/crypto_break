@@ -122,7 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="dictionary.txt" />
-    <Text Include="hash.txt" />
+    <Text Include="memo.txt" />
     <Text Include="perms.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -11,21 +11,26 @@ crypto::crypto()
 
 	infile.open("memo.txt");
 	map_key key;
-	while (!infile.eof())
+	while (!infile.peek() == std::ifstream::traits_type::eof())
 	{
 		infile >> key.first >> key.second;
 		memo.insert(key);
 	}
-	printf("Dictionary is %d items large\n\n", dict.size());
+	//printf("Dictionary is %d items large\n\n", dict.size());
 }
 
 crypto::~crypto()
 {
-	std::ofstream outfile("memo.txt");
-	for (auto it = memo.begin(); it != memo.end(); ++it)
+	if (!memo.empty())
 	{
-		outfile << it->first << " " << it->second << std::endl;
+		std::ofstream outfile("memo.txt");
+		for (auto it = memo.begin(); it != memo.end(); ++it)
+		{
+			outfile << it->first << " " << it->second << std::endl;
+			std::cout << it->first << " " << it->second << std::endl;
+		}
 	}
+
 }
 
 void crypto::insert_hash(const map_key& item)
@@ -35,7 +40,7 @@ void crypto::insert_hash(const map_key& item)
 		memo.insert(item);	
 }
 
-/*
+
 std::string crypto::str_inc(const std::string& input, int i)
 {
 	auto increment = [i](char c){return (char)('a' + ((c - 'A' + i) % 26)); };
@@ -45,8 +50,7 @@ std::string crypto::str_inc(const std::string& input, int i)
 	//std::cout << str << std::endl;
 	return str;
 }
-*/
-/*
+
 std::vector<std::string> crypto::shift(const std::string& str)
 {
 	std::vector<std::string> str_vec;
@@ -54,7 +58,7 @@ std::vector<std::string> crypto::shift(const std::string& str)
 		str_vec.push_back(str_inc(str, i));
 	return str_vec;
 }
-*/
+
 
 std::vector<int> crypto::prime_factors(int n)
 {
@@ -225,14 +229,18 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 		temp = str;
 		for (int j = 0; j < str.size(); ++j)		
 			temp[j] = code[temp[j] - 'a'];		
-		freqs = freq_list(temp);				
+		//freqs = freq_list(temp);				
 		bool good_dist = true; //true if freq dist is close to english (same top 9 letters-ish)
-		auto limit = std::min(top_alpha.size(), str.size());
-		for (int i = 0; good_dist && i < limit; ++i)
+		if (str.size() > 30)
 		{
-			if (top_alpha.find(freqs[i].second) == std::string::npos)
-				good_dist = false;
+			auto limit = std::min(top_alpha.size(), str.size()-25);
+			for (int i = 0; good_dist && i < limit; ++i)
+			{
+				if (top_alpha.find(freqs[i].second) == std::string::npos)
+					good_dist = false;
+			}
 		}
+		/**/
 		if (good_dist)
 			words.push_back(temp);		
 	}
@@ -253,11 +261,11 @@ int crypto::get_scores(const std::string& str, size_t pos)
     std::string window = str.substr(pos, m);
 	//lock hash
 	auto it = memo.find(str.substr(pos, str.size())); //<-- not thread safe
-	bool in_hash = it== memo.end(); //<-- not thread safe	
+	bool in_hash = (it != memo.end()); //<-- not thread safe	
 	if (!in_hash)  //<-- not thread safe
 	{
 		//unlock memo
-		while (m < (str.size() - pos))
+		while (m <= (str.size() - pos))
 		{			
 			if (dict.find(window) != dict.end())
 			{
@@ -265,8 +273,8 @@ int crypto::get_scores(const std::string& str, size_t pos)
 				if (ret < temp)
 					ret = temp;
 			}
-			++m;
 			window += str[pos + m];
+			++m;						
 		}
 				
 		//lock memo

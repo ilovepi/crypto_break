@@ -40,7 +40,7 @@ private:
     /**
     * increments all the letters in a string by i: 'a' +1 = 'b'
     */
-	//static std::string str_inc(const std::string& input, int i);
+	static std::string str_inc(const std::string& input, int i);
 
 
     /**
@@ -64,19 +64,8 @@ private:
     */
 	bool check_tops(const std::vector<int> &freqs);
 
-    /**
-    * scores a string on how well it superficially matches english based on the number and length of dictionary words
-    * @returns an integer score based on the number and length of english words in a string
-    */
-	int get_scores(const std::string& str);
+    
 
-    /**
-    * scores a string on how well it superficially matches english based on the number and length of dictionary words
-    * @returns an integer score based on the number and length of english words in a string
-    * @param str the string to try and match
-    * @param n the index of the starting position in the string to begin scoring
-    */
-	int get_scores(const std::string& str, size_t n);
 
     /**
     * a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
@@ -97,7 +86,7 @@ public:
     * ceasar cypher shift
     * returns a vector with all possible caesar cyphers of the input string
     */
-	//static std::vector<std::string> shift(const std::string& str);
+	static std::vector<std::string> shift(const std::string& str);
 
 
     /**
@@ -121,6 +110,22 @@ public:
 	std::vector<std::string> remapper(const std::string& str);
 
 	void insert_hash(const map_key& item);
+
+	/**
+	* scores a string on how well it superficially matches english based on the number and length of dictionary words
+	* @returns an integer score based on the number and length of english words in a string
+	*/
+	int get_scores(const std::string& str);
+
+
+
+	/**
+	* scores a string on how well it superficially matches english based on the number and length of dictionary words
+	* @returns an integer score based on the number and length of english words in a string
+	* @param str the string to try and match
+	* @param n the index of the starting position in the string to begin scoring
+	*/
+	int get_scores(const std::string& str, size_t n);
 
 };
 
