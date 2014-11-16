@@ -129,9 +129,6 @@ public:
 	*/
 	int get_scores(const std::string& str, size_t n);
 	static bool comp2(map_key x, map_key y);
-
-
-
 	static void merge(scores &ret, std::vector<map_key> &other);
 
 };

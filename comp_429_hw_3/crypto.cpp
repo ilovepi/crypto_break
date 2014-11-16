@@ -132,6 +132,7 @@ void crypto::merge(scores &ret, std::vector<map_key> &other)
 	else
 		ret[other.front().first] = std::max(other.front().second, ret[other.front().first]);
 	std::pop_heap(other.begin(), other.end());
+	other.pop_back();
 }
 
 crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
@@ -156,10 +157,10 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 	}
 
 	while (ret.size() < 1000 && !whole_que.empty())
-		merge(ret, sub_que);
-
-	while (ret.size() < 1000 && !whole_que.empty() && !sub_que.empty())
 		merge(ret, whole_que);
+
+	while (ret.size() < 1000 && !sub_que.empty())
+		merge(ret, sub_que);
 
 	return ret;
 }
@@ -223,7 +224,7 @@ void crypto::transpose(const std::string& str)
 		writer = top(ord, writer, 1000);
 	}
 	for (auto it = writer.begin(); it != writer.end(); ++it)
-		file << it->second << std::endl;
+		file << it->first << " " << it->second << std::endl;
 	file.close();
 	++count;
 	printf("Finished %d \n", count);
