@@ -231,11 +231,12 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 		temp = str;
 		for (int j = 0; j < str.size(); ++j)		
 			temp[j] = code[temp[j] - 'a'];		
-		//freqs = freq_list(temp);				
+		freqs = freq_list(temp);				
 		bool good_dist = true; //true if freq dist is close to english (same top 9 letters-ish)
-		if (str.size() > 30)
+		int size = str.size();
+		if (size > 30)
 		{
-			auto limit = std::min(top_alpha.size(), str.size()-25);
+			auto limit = std::min((int)top_alpha.size(), (size-28));
 			for (int i = 0; good_dist && i < limit; ++i)
 			{
 				if (top_alpha.find(freqs[i].second) == std::string::npos)

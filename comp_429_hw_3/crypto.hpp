@@ -7,12 +7,9 @@
 #include <functional>
 #include <fstream>
 #include <cmath>
-//#include <future>
 #include <array>
 #include <unordered_map>
 #include <map>
-//#include <mutex>
-
 
 class crypto
 {
