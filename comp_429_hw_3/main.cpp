@@ -8,14 +8,8 @@ int main()
 	std::string   msg = "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
 		
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
-	
-	
-	
-
-
 	auto mapped = solver.remapper(msg);
 	
-
 	//system("pause");
 
 	//auto shifted = crypto::shift(msg);	

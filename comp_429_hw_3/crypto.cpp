@@ -51,7 +51,7 @@ std::string crypto::str_inc(const std::string& input, int i)
 	//std::cout << str << std::endl;
 	return str;
 }
-*/
+
 
 std::vector<std::string> crypto::shift(const std::string& str)
 {
@@ -60,7 +60,7 @@ std::vector<std::string> crypto::shift(const std::string& str)
 		str_vec.push_back(str_inc(str, i));
 	return str_vec;
 }
-
+/**/
 
 std::vector<int> crypto::prime_factors(int n)
 {
