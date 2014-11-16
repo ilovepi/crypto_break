@@ -40,13 +40,13 @@ void crypto::insert_hash(const map_key& item)
 		memo.insert(item);	
 }
 
+char crypto::incr(char c, int i)
+{	return (char)('a' + ((c - 'A' + i) % 26));	}
 
 std::string crypto::str_inc(const std::string& input, int i)
 {
-	auto increment = [i](char c){return (char)('a' + ((c - 'A' + i) % 26)); };
-
 	std::string str;
-	std::transform(input.begin(), input.end(), std::back_inserter(str), increment);
+	std::transform(input.begin(), input.end(), std::back_inserter(str), incr);
 	//std::cout << str << std::endl;
 	return str;
 }

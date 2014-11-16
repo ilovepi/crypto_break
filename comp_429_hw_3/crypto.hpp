@@ -64,7 +64,7 @@ private:
     */
 	bool check_tops(const std::vector<int> &freqs);
 
-    
+	char incr(char c, int i);
 
 
     /**
