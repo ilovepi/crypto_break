@@ -5,7 +5,8 @@ int main()
 	std::ofstream f("perms.txt");
 	f.close();
 	crypto solver;
-	std::string   msg = "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
+
+	std::string   msg = "OHLWEDOLXRLX";// "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
 		
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 	//auto mapped = solver.remapper(msg);

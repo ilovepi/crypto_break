@@ -26,11 +26,9 @@ crypto::~crypto()
 		std::ofstream outfile("memo.txt");
 		for (auto it = memo.begin(); it != memo.end(); ++it)
 		{
-			outfile << it->first << " " << it->second << std::endl;
-			
+			outfile << it->first << " " << it->second << std::endl;			
 		}
 	}
-
 }
 
 void crypto::insert_hash(const map_key& item)
@@ -66,21 +64,22 @@ std::vector<std::string> crypto::shift(const std::string& str)
 }
 /**/
 
-std::vector<int> crypto::prime_factors(int n)
+std::set<int> crypto::prime_factors(int n)
 {
-	std::vector<int> factor;
+	std::set<int> factor;
 	auto limit = sqrt(n);
 	for (auto i = 2; i < limit; ++i)
 	{
 		if (n % i == 0)
 		{
-			factor.push_back(i);
-			factor.push_back(n / i);
-			return factor;
+			factor.insert(i);
+			factor.insert(n / i);
+			
 		}
 	}
-	factor.push_back(1);
-	factor.push_back(n);
+	if (factor.empty())	
+		factor.insert(n);
+
 	return factor;
 }
 
@@ -119,27 +118,50 @@ bool crypto::comp(const score &x, const score &y)
     return x.first > y.first;
 }
 
+bool crypto::comp2(map_key x, map_key y)
+{
+	return  x.second > y.second;
+}
+
+
+void crypto::merge(scores &ret, std::vector<map_key> &other)
+{
+	auto it = ret.find(other.front().first);
+	if (it == ret.end())
+		ret.insert(other.front());
+	else
+		ret[other.front().first] = std::max(other.front().second, ret[other.front().first]);
+	std::pop_heap(other.begin(), other.end());
+}
+
 crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 {
-	auto ret = &whole;
+	scores ret;
+	std::vector<std::pair<std::string, int>> whole_que, sub_que;	
+	for (auto it = whole.begin(); it != whole.end(); it++)	
+		whole_que.push_back(*it);			
+	std::make_heap(whole_que.begin(), whole_que.end());
 
-	int i = 0;
-	if (whole.size() < n)
-	{
-		while (whole.size() < n && i < sub.size())
-			whole.push_back(sub[i++]);
+	for (auto it = sub.begin(); it != sub.end(); it++)
+		sub_que.push_back(*it);
+	std::make_heap(sub_que.begin(), sub_que.end());
+
+	while (ret.size() < 1000 && !whole_que.empty()  && !sub_que.empty())
+	{		
+		if (comp2(whole_que.front(), sub_que.front()))
+			merge(ret, whole_que);
+		
+		else
+			merge(ret, sub_que);		
 	}
-	else
-	{
-		auto x = whole;
-		for (int j = 0, k = 0; i < n; i++)
-		{
-			x[i] = comp(whole[j], sub[k]) ? whole[j++] : sub[k++];
-		}
-		ret = &x;
-	}
-	std::sort(ret->begin(), ret->end(), comp);
-	return *ret;
+
+	while (ret.size() < 1000 && !whole_que.empty())
+		merge(ret, sub_que);
+
+	while (ret.size() < 1000 && !whole_que.empty() && !sub_que.empty())
+		merge(ret, whole_que);
+
+	return ret;
 }
 
 
@@ -164,14 +186,13 @@ void crypto::transpose(const std::string& str)
 {
 	static int count = 0;
 	auto freqs = get_freq(str);
-	if (!check_tops(freqs))
-		return;
-
+	//if (!check_tops(freqs))
+		//return;
 
 	std::ofstream file("perms.txt", std::ofstream::app);
 	size_t size = str.size();
-	auto factors = prime_factors(size);
-	std::vector<std::pair<int, std::string>> ord, writer;
+	auto factors = prime_factors(size);		
+	scores ord, writer;
 	for (auto it = factors.begin(); it != factors.end(); ++it)
 	{
         auto rows = (*it);
@@ -183,7 +204,7 @@ void crypto::transpose(const std::string& str)
 		for (int i = 0; i < size / rows; ++i)
 		{
 			for (int j = 0; j < rows; ++j)
-				pqr[i] += str[j + i*rows];
+				pqr[i] += str[i + j*(size/ rows)];
 		}
 		
 		while (std::next_permutation(indexes.begin(), indexes.end()))
@@ -193,11 +214,12 @@ void crypto::transpose(const std::string& str)
 				word += pqr[i];
 
 			auto score = get_scores(word);
-			if (score > 0)
-				ord.push_back(std::make_pair(score, word));
+			if (score > 0 && ord.find(word) != ord.end())
+				ord[word] = std::max(ord[word], score);
+			else
+				ord[word] =  score;
 
-		} // end while	
-		std::sort(ord.begin(), ord.end(), comp);
+		} // end while			
 		writer = top(ord, writer, 1000);
 	}
 	for (auto it = writer.begin(); it != writer.end(); ++it)
@@ -215,11 +237,10 @@ crypto::scores crypto::freq_list(const std::string &s)
 	std::string str = "a";
 	
 	for (int i = 0; i < 26; ++i, ++str[0])
-        freq.push_back(std::make_pair(0, str));
+        freq.insert(std::make_pair(str,0));
 
 	for (int i = 0; i < s.size(); ++i)
-		++freq[s[i] - 'a'].first;
-	std::sort(freq.begin(), freq.end(), comp);
+		++freq[s.substr(i,1)];	
 	return freq;
 }
 
@@ -240,10 +261,11 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 		int size = str.size();
 		if (size > 30)
 		{
-			auto limit = std::min((int)top_alpha.size(), (size-28));
-			for (int i = 0; good_dist && i < limit; ++i)
+			auto limit = std::min((int)top_alpha.size(), (size-28));			
+			auto it = freqs.begin();
+			for (int i = 0; good_dist && i < limit && it != freqs.end(); ++i, ++it)
 			{
-				if (top_alpha.find(freqs[i].second) == std::string::npos)
+				if (top_alpha.find(it->first) == std::string::npos)
 					good_dist = false;
 			}
 		}

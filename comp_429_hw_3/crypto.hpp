@@ -10,11 +10,12 @@
 #include <array>
 #include <unordered_map>
 #include <map>
+#include <set>
 
 class crypto
 {
 	typedef std::pair<int, std::string> score;
-	typedef std::vector<score> scores;
+	typedef std::map<std::string, int> scores;
 	typedef std::pair<std::string, int> map_key;
 
 private:
@@ -43,7 +44,7 @@ private:
     /**
     * @return a vector of the first 2 factors of an integer
     */
-	static std::vector<int> prime_factors(int n);
+	static std::set<int> prime_factors(int n);
 
     /**
     * parallely makes a vector acording to some rules
@@ -54,7 +55,7 @@ private:
     * takes 2 lists of scores and merges them into a new list with a maximum size
     * @return a vector of the top scores
     */
-	static scores top(scores &sub, scores &whole, size_t n);
+	static std::map<std::string, int> top(scores &sub, scores &whole, size_t n);
 
     /**
     * checks if the top letter frequencies in a cypher text  match english
@@ -127,6 +128,11 @@ public:
 	* @param n the index of the starting position in the string to begin scoring
 	*/
 	int get_scores(const std::string& str, size_t n);
+	static bool comp2(map_key x, map_key y);
+
+
+
+	static void merge(scores &ret, std::vector<map_key> &other);
 
 };
 
