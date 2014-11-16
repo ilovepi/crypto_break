@@ -70,6 +70,10 @@ private:
     static bool comp(const score &x, const score &y);
 
 
+	static char incr(char c);
+	static std::string str_inc(const std::string& input);
+
+
 public:
     /**
     * basic constructor

@@ -27,7 +27,7 @@ crypto::~crypto()
 		for (auto it = memo.begin(); it != memo.end(); ++it)
 		{
 			outfile << it->first << " " << it->second << std::endl;
-			std::cout << it->first << " " << it->second << std::endl;
+			
 		}
 	}
 
@@ -40,15 +40,14 @@ void crypto::insert_hash(const map_key& item)
 		memo.insert(item);	
 }
 
-/*
-char crypto::incr(char c, int i)
-{	return (char)('a' + ((c - 'A' + i) % 26));	}
 
-std::string crypto::str_inc(const std::string& input, int i)
+char crypto::incr(char c)
+{	return (char)('a' + ((c - 'A') % 26));	}
+
+std::string crypto::str_inc(const std::string& input)
 {
 	std::string str;
-	std::transform(input.begin(), input.end(), std::back_inserter(str), incr);
-	//std::cout << str << std::endl;
+	std::transform(input.begin(), input.end(), std::back_inserter(str), incr);	
 	return str;
 }
 
@@ -56,8 +55,13 @@ std::string crypto::str_inc(const std::string& input, int i)
 std::vector<std::string> crypto::shift(const std::string& str)
 {
 	std::vector<std::string> str_vec;
+	auto temp = str;
 	for (int i = 0; i < 26; ++i)
-		str_vec.push_back(str_inc(str, i));
+	{
+		temp = str_inc(temp);
+		str_vec.push_back(temp);
+	}
+		
 	return str_vec;
 }
 /**/
@@ -257,6 +261,8 @@ int crypto::get_scores(const std::string& str)
 /* This needs multi threading !!!!!*/
 int crypto::get_scores(const std::string& str, size_t pos)
 {
+	if (pos >= str.size())
+		return 0;
 	int ret= 0;                             // return value
     int temp = 0;                           // temp value for calc
     int m = 1; 	                            // window size
@@ -276,8 +282,9 @@ int crypto::get_scores(const std::string& str, size_t pos)
 				if (ret < temp)
 					ret = temp;
 			}
-			window += str[pos + m];
-			++m;						
+			++m;
+			window = str.substr(pos, m);
+									
 		}
 				
 		//lock memo
@@ -292,5 +299,5 @@ int crypto::get_scores(const std::string& str, size_t pos)
 		//unlock memo
 	}	
 
-	return ret;
+	return std::max(ret, get_scores(str, pos+1));
 }
