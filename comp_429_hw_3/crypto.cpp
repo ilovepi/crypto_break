@@ -40,6 +40,7 @@ void crypto::insert_hash(const map_key& item)
 		memo.insert(item);	
 }
 
+/*
 char crypto::incr(char c, int i)
 {	return (char)('a' + ((c - 'A' + i) % 26));	}
 
@@ -50,6 +51,7 @@ std::string crypto::str_inc(const std::string& input, int i)
 	//std::cout << str << std::endl;
 	return str;
 }
+*/
 
 std::vector<std::string> crypto::shift(const std::string& str)
 {

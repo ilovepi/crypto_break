@@ -40,7 +40,7 @@ private:
     /**
     * increments all the letters in a string by i: 'a' +1 = 'b'
     */
-	static std::string str_inc(const std::string& input, int i);
+	//static std::string str_inc(const std::string& input, int i);
 
 
     /**
@@ -64,7 +64,7 @@ private:
     */
 	bool check_tops(const std::vector<int> &freqs);
 
-	char incr(char c, int i);
+	//char incr(char c, int i);
 
 
     /**
