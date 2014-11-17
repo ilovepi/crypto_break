@@ -6,9 +6,11 @@ int main()
 	f.close();
 	crypto solver;
 
-	std::string   msg = "OHLWEDOLXRLX";// "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
-		
+	std::string   msg =  "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
+	
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
+
+	//solver.transpose(msg);
 	//auto mapped = solver.remapper(msg);
 	
 	//system("pause");
@@ -17,6 +19,7 @@ int main()
 
 	//for (auto it = mapped.begin(); it != mapped.end(); ++it)
 		//solver.transpose(msg);
+	//std::cout << solver.get_scores("helloworldxx") << std::endl;
 	
 	for (auto it = shifted.begin(); it != shifted.end(); ++it)
 	{
@@ -28,6 +31,6 @@ int main()
 	//solver.get_scores("ac");
 
 
-	system("pause");
+	//system("pause");
 	return EXIT_SUCCESS;
 }

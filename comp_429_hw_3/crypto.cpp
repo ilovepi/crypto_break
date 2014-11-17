@@ -212,7 +212,7 @@ void crypto::transpose(const std::string& str)
 		{			
 			std::string word;
 			for (int i = 0; i < indexes.size(); ++i)
-				word += pqr[i];
+				word += pqr[indexes[i]];
 
 			auto score = get_scores(word);
 			if (score > 0 && ord.find(word) != ord.end())
@@ -223,7 +223,8 @@ void crypto::transpose(const std::string& str)
 		} // end while			
 		writer = top(ord, writer, 1000);
 	}
-	for (auto it = writer.begin(); it != writer.end(); ++it)
+	auto ret = flip_map(writer);
+	for (auto it = ret.rbegin(); it != ret.rend(); ++it)
 		file << it->first << " " << it->second << std::endl;
 	file.close();
 	++count;

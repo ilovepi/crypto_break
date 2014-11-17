@@ -1,5 +1,6 @@
 #ifndef _CRYTO_HPP_
 #define _CRYTO_HPP_
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@
 #include <unordered_map>
 #include <map>
 #include <set>
+#include "utility.hpp"
 
 class crypto
 {
