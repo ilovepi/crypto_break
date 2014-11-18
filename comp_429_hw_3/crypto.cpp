@@ -9,33 +9,33 @@ crypto::crypto()
 		dict.insert(std::make_pair(word, word.size()*word.size()));
 	infile.close();
 
-	infile.open("memo.txt");
+	/*infile.open("memo.txt");
 	map_key key;
 	while (!infile.peek() == std::ifstream::traits_type::eof())
 	{
 		infile >> key.first >> key.second;
 		memo.insert(key);
 	}
-	//printf("Dictionary is %d items large\n\n", dict.size());
+	//printf("Dictionary is %d items large\n\n", dict.size());/**/
 }
 
 crypto::~crypto()
 {
-	if (!memo.empty())
+	/*if (!memo.empty())
 	{
 		std::ofstream outfile("memo.txt");
 		for (auto it = memo.begin(); it != memo.end(); ++it)
 		{
 			outfile << it->first << " " << it->second << std::endl;			
 		}
-	}
+	}/**/
 }
 
 void crypto::insert_hash(const map_key& item)
 {
-	auto it = memo.find(item.first);
+	/*auto it = memo.find(item.first);
 	if (it == memo.end() || it->second < item.second)
-		memo.insert(item);	
+		memo.insert(item);	/**/
 }
 
 
@@ -147,19 +147,18 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 		sub_que.push_back(*it);
 	std::make_heap(sub_que.begin(), sub_que.end());
 
-	while (ret.size() < 1000 && !whole_que.empty()  && !sub_que.empty())
+	while (ret.size() < n && !whole_que.empty()  && !sub_que.empty())
 	{		
 		if (comp2(whole_que.front(), sub_que.front()))
-			merge(ret, whole_que);
-		
+			merge(ret, whole_que);		
 		else
 			merge(ret, sub_que);		
 	}
 
-	while (ret.size() < 1000 && !whole_que.empty())
+	while (ret.size() < n && !whole_que.empty())
 		merge(ret, whole_que);
 
-	while (ret.size() < 1000 && !sub_que.empty())
+	while (ret.size() < n && !sub_que.empty())
 		merge(ret, sub_que);
 
 	return ret;
@@ -224,7 +223,7 @@ void crypto::transpose(const std::string& str)
 		writer = top(ord, writer, 1000);
 	}
 	auto ret = flip_map(writer);
-	for (auto it = ret.rbegin(); it != ret.rend(); ++it)
+	for (auto it = ret.begin(); it != ret.end(); ++it)
 		file << it->first << " " << it->second << std::endl;
 	file.close();
 	++count;
@@ -236,8 +235,7 @@ void crypto::transpose(const std::string& str)
 crypto::scores crypto::freq_list(const std::string &s)
 {
 	scores freq;
-	std::string str = "a";
-	
+	std::string str = "a";	
 	for (int i = 0; i < 26; ++i, ++str[0])
         freq.insert(std::make_pair(str,0));
 
@@ -279,11 +277,14 @@ std::vector<std::string> crypto::remapper(const std::string& str)
 }
 
 int crypto::get_scores(const std::string& str)
-{ return get_scores(str, 0); }
+{
+	std::map<std::string, size_t> memo;
+	return get_scores(str, memo, 0); 
+}
 
 
 /* This needs multi threading !!!!!*/
-int crypto::get_scores(const std::string& str, size_t pos)
+int crypto::get_scores(const std::string& str, std::map<std::string, size_t> &memo, size_t pos)
 {
 	if (pos >= str.size())
 		return 0;
@@ -302,13 +303,12 @@ int crypto::get_scores(const std::string& str, size_t pos)
 		{			
 			if (dict.find(window) != dict.end())
 			{
-				temp = (m*m + get_scores(str, pos + m));
+				temp = (m*m + get_scores(str, memo, pos + m));
 				if (ret < temp)
 					ret = temp;
 			}
 			++m;
-			window = str.substr(pos, m);
-									
+			window = str.substr(pos, m);									
 		}
 				
 		//lock memo
@@ -323,5 +323,5 @@ int crypto::get_scores(const std::string& str, size_t pos)
 		//unlock memo
 	}	
 
-	return std::max(ret, get_scores(str, pos+1));
+	return std::max(ret, get_scores(str, memo, pos+1));
 }

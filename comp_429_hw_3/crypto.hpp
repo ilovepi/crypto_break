@@ -30,7 +30,7 @@ private:
     /**
     * A hash used for memoization of strings and their scores... could be better
     */
-	std::map<std::string, size_t> memo;
+	//std::map<std::string, size_t> memo;
 
     /**
     * A dictionary of english words
@@ -129,7 +129,7 @@ public:
 	* @param str the string to try and match
 	* @param n the index of the starting position in the string to begin scoring
 	*/
-	int get_scores(const std::string& str, size_t n);
+	int get_scores(const std::string& str, std::map<std::string, size_t> &memo, size_t n);
 	static bool comp2(map_key x, map_key y);
 	static void merge(scores &ret, std::vector<map_key> &other);
 
