@@ -214,7 +214,7 @@ void crypto::transpose(const std::string& str)
 				word += pqr[indexes[i]];
 
 			auto score = get_scores(word);
-			if (score > 0 && ord.find(word) != ord.end())
+			if (ord.find(word) != ord.end())
 				ord[word] = std::max(ord[word], score);
 			else
 				ord[word] =  score;
