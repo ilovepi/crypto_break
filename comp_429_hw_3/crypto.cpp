@@ -40,7 +40,7 @@ void crypto::insert_hash(const map_key& item)
 
 
 char crypto::incr(char c)
-{	return (char)('a' + ((c - 'A') % 26));	}
+{	return (char)('a' + ((c-'a'+1) % 26));	}
 
 std::string crypto::str_inc(const std::string& input)
 {

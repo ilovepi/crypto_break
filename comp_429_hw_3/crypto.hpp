@@ -16,11 +16,12 @@
 
 class crypto
 {
+public:
 	typedef std::pair<int, std::string> score;
 	typedef std::map<std::string, int> scores;
 	typedef std::pair<std::string, int> map_key;
 
-private:
+//private:
 
     /**
     * Holds a string of the most frequent letters in the alphabet
@@ -77,7 +78,7 @@ private:
 	static std::string str_inc(const std::string& input);
 
 
-public:
+//public:
     /**
     * basic constructor
     */
