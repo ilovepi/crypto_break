@@ -58,10 +58,10 @@ int main()
 
 	
 
-	//auto shifted = crypto::shift(msg);	
+	auto shifted = crypto::shift(msg);	
 	
-	solver.columnar_decryption(msg);
-	//solver.columnar_decryption(shifted[22]);
+	//solver.columnar_decryption(msg);
+	solver.columnar_decryption(shifted[22]);
 	/*for (auto item : shifted)
 	{
 		auto freqs = solver.freq_list(item);
