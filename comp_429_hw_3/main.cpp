@@ -21,7 +21,7 @@ int main()
 	auto shifted = crypto::shift(msg);	
 	
 	
-	//solver.columnar_decryption(shifted[22]);
+	solver.columnar_decryption(shifted[22]);
 	/*for (auto item : shifted)
 	{
 		auto freqs = solver.freq_list(item);
@@ -49,7 +49,7 @@ int main()
 	//std::cout << count << std::endl;
 	
 	
-	for (auto it = shifted.begin(); it != shifted.end(); ++it)		
+	/*for (auto it = shifted.begin(); it != shifted.end(); ++it)		
 		solver.columnar_decryption(*it);
 	/**/
 		
