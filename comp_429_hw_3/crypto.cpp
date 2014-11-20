@@ -338,7 +338,7 @@ void crypto::columnar_decryption(std::string cipher)
 	static int count = 0;
 	std::ofstream file("perms.txt", std::ofstream::app);	
 	scores ord, writer;
-	for (int columns = 1; columns <= 3; columns++)
+	for (int columns = 1; columns <= 10; columns++)
 	{
 		std::vector<size_t> indexes;
 		for (int i = 0; i < columns; ++i)
