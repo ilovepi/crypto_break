@@ -31,14 +31,6 @@ crypto::~crypto()
 	}/**/
 }
 
-void crypto::insert_hash(const map_key& item)
-{
-	/*auto it = memo.find(item.first);
-	if (it == memo.end() || it->second < item.second)
-		memo.insert(item);	/**/
-}
-
-
 char crypto::incr(char c)
 {	return (char)('a' + ((c-'a'+1) % 26));	}
 
@@ -48,7 +40,6 @@ std::string crypto::str_inc(const std::string& input)
 	std::transform(input.begin(), input.end(), std::back_inserter(str), incr);	
 	return str;
 }
-
 
 std::vector<std::string> crypto::shift(const std::string& str)
 {
@@ -62,55 +53,6 @@ std::vector<std::string> crypto::shift(const std::string& str)
 		
 	return str_vec;
 }
-/**/
-
-std::set<int> crypto::prime_factors(int n)
-{
-	std::set<int> factor;
-	auto limit = sqrt(n);
-	for (auto i = 2; i < limit; ++i)
-	{
-		if (n % i == 0)
-		{
-			factor.insert(i);
-			factor.insert(n / i);
-			
-		}
-	}
-	if (factor.empty())	
-		factor.insert(n);
-
-	return factor;
-}
-
-/*
-std::string column_switch(std::vector<std::string> words, std::vector<int> indexes)
-{
-std::string str;
-for (auto idx : indexes)
-for (auto i = 0; i < words.size(); ++i)
-str.push_back(words[i][idx]);
-return str;
-}
-*/
-
-/*
-std::vector<std::future<bool>> crypto::make_vec(std::vector<std::string> vec, std::string str)
-{
-	//std::function<std::atomic<bool(std::string, std::string)>> f
-
-	auto f = [](std::string str1, std::string str2){ return (std::string::npos != str2.find(str1)); };
-	std::vector<std::future<bool>> futs;
-	futs.reserve(vec.size());
-	for (auto word : vec)
-		futs.push_back(std::async(std::launch::async, std::bind(f, word, str)));
-	
-	//for (auto f = futs.begin(); f != futs.end(); ++f)
-	//f->get();
-	
-	return futs;
-}
-*/
 
 
 bool crypto::comp(const score &x, const score &y)
@@ -174,70 +116,6 @@ std::vector<int> crypto::get_freq(const std::string& str)
 }
 
 
-bool crypto::check_tops(const std::vector<int>& freqs)
-{
-	auto m = std::max_element(freqs.begin(), freqs.end());
-    char c = (*m) + 'a';
-	return (top_alpha.find(c) != std::string::npos);
-}
-
-
-void crypto::transpose(const std::string& str)
-{
-	std::ofstream file("perms.txt", std::ofstream::app);
-	static int count = 0;
-	auto freqs = get_freq(str);
-	//if (!check_tops(freqs))
-		//return;
-
-	size_t size = str.size();
-	//auto factors = prime_factors(size);		
-	scores ord, writer;
-	//for (auto it = factors.begin(); it != factors.end(); ++it)
-	for (auto rows = 1; rows < str.size(); ++rows)
-	{
-        //auto rows = (*it);
-		std::vector<int> indexes;
-		for (int i = 0; i < size / rows; ++i)
-			indexes.push_back(i);
-		auto columns = std::ceil((double)size / rows);
-		std::vector<std::string> xyz(rows);
-		for (auto i = 0; i < str.size(); ++i)
-		{
-			//xyz
-		}
-
-		std::vector<std::string> pqr(columns);
-		for (int i = 0; i < columns; ++i)
-		{
-			for (int j = 0; (j < rows) && ((i + j*(columns)) < str.size()); ++j)
-				pqr[i] += str[i + j*(columns)];
-		}
-		
-		while (std::next_permutation(indexes.begin(), indexes.end()))
-		{			
-			std::string word;
-			for (int i = 0; i < indexes.size(); ++i)
-				word += pqr[indexes[i]];
-
-			auto score = get_scores(word);
-			if (ord.find(word) != ord.end())
-				ord[word] = std::max(ord[word], score);
-			else
-				ord[word] =  score;
-
-		} // end while			
-		writer = top(ord, writer, 1000);
-	}
-	auto ret = flip_map(writer);
-	for (auto it = ret.begin(); it != ret.end(); ++it)
-		file << it->first << " " << it->second << std::endl;
-	file.close();
-	++count;
-	printf("Finished %d \n", count);
-}
-
-
 
 crypto::scores crypto::freq_list(const std::string &s)
 {
@@ -249,38 +127,6 @@ crypto::scores crypto::freq_list(const std::string &s)
 	for (int i = 0; i < s.size(); ++i)
 		++freq[s.substr(i,1)];	
 	return freq;
-}
-
-/* can we multi thread this?? maybe write it to file???*/
-std::vector<std::string> crypto::remapper(const std::string& str)
-{	
-	std::string code = "abcdefghijklmnopqrstuvwxyz";
-	scores freqs;
-	std::vector<std::string> words;
-	std::string temp;
-	while (std::next_permutation(code.begin(), code.end()))
-	{
-		temp = str;
-		for (int j = 0; j < str.size(); ++j)		
-			temp[j] = code[temp[j] - 'a'];		
-		freqs = freq_list(temp);				
-		bool good_dist = true; //true if freq dist is close to english (same top 9 letters-ish)
-		int size = str.size();
-		if (size > 30)
-		{
-			auto limit = std::min((int)top_alpha.size(), (size-28));			
-			auto it = freqs.begin();
-			for (int i = 0; good_dist && i < limit && it != freqs.end(); ++i, ++it)
-			{
-				if (top_alpha.find(it->first) == std::string::npos)
-					good_dist = false;
-			}
-		}
-		/**/
-		if (good_dist)
-			words.push_back(temp);		
-	}
-	return words;
 }
 
 int crypto::get_scores(const std::string& str)
@@ -338,7 +184,7 @@ void crypto::columnar_decryption(std::string cipher)
 	static int count = 0;
 	std::ofstream file("perms.txt", std::ofstream::app);	
 	scores ord, writer;
-	for (int columns = 1; columns <= 10; columns++)
+	for (int columns = 3; columns <= 8; columns++)
 	{
 		std::vector<size_t> indexes;
 		for (int i = 0; i < columns; ++i)

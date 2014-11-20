@@ -8,8 +8,8 @@ int main()
 	f.close();
 	crypto solver;
 
-	std::string   msg = "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
-	//"LWLHLODEOR";// 
+	std::string   msg = "LWLHLODEOR";//"DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
+	// 
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 
 	
@@ -20,8 +20,8 @@ int main()
 
 	auto shifted = crypto::shift(msg);	
 	
-	//solver.transpose(msg);
-	//solver.transpose(shifted[22]);
+	
+	//solver.columnar_decryption(shifted[22]);
 	/*for (auto item : shifted)
 	{
 		auto freqs = solver.freq_list(item);
@@ -50,7 +50,7 @@ int main()
 	
 	
 	for (auto it = shifted.begin(); it != shifted.end(); ++it)		
-		solver.columnar_decryption(msg);
+		solver.columnar_decryption(*it);
 	/**/
 		
 	//system("pause");
