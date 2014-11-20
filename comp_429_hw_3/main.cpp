@@ -1,5 +1,7 @@
 #include "crypto.hpp"
 
+
+
 int main()
 {
 	std::ofstream f("perms.txt");
@@ -7,9 +9,10 @@ int main()
 	crypto solver;
 
 	std::string   msg = "DRPWPWXHDRDKDUBKIHQVQRIKPGWOVOESWPKPVOBBDVVVDXSURWRLUEBKOLVHIHBKHLHBLNDQRFLOQ";/**/
-	
+	//"LWLHLODEOR";// 
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 
+	
 	//solver.transpose(msg);
 	//auto mapped = solver.remapper(msg);
 	
@@ -17,8 +20,8 @@ int main()
 
 	auto shifted = crypto::shift(msg);	
 	
-	
-	solver.transpose(shifted[22]);
+	//solver.transpose(msg);
+	//solver.transpose(shifted[22]);
 	/*for (auto item : shifted)
 	{
 		auto freqs = solver.freq_list(item);
@@ -46,11 +49,10 @@ int main()
 	//std::cout << count << std::endl;
 	
 	
-	/*for (auto it = shifted.begin(); it != shifted.end(); ++it)		
-		solver.transpose(*it);
+	for (auto it = shifted.begin(); it != shifted.end(); ++it)		
+		solver.columnar_decryption(msg);
 	/**/
-	
-	
+		
 	//system("pause");
 	return EXIT_SUCCESS;
 }

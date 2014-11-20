@@ -133,6 +133,7 @@ public:
 	int get_scores(const std::string& str, std::map<std::string, size_t> &memo, size_t n);
 	static bool comp2(map_key x, map_key y);
 	static void merge(scores &ret, std::vector<map_key> &other);
+	void columnar_decryption(std::string cipher);
 
 };
 

@@ -184,27 +184,34 @@ bool crypto::check_tops(const std::vector<int>& freqs)
 
 void crypto::transpose(const std::string& str)
 {
+	std::ofstream file("perms.txt", std::ofstream::app);
 	static int count = 0;
 	auto freqs = get_freq(str);
 	//if (!check_tops(freqs))
 		//return;
 
-	std::ofstream file("perms.txt", std::ofstream::app);
 	size_t size = str.size();
-	auto factors = prime_factors(size);		
+	//auto factors = prime_factors(size);		
 	scores ord, writer;
-	for (auto it = factors.begin(); it != factors.end(); ++it)
+	//for (auto it = factors.begin(); it != factors.end(); ++it)
+	for (auto rows = 1; rows < str.size(); ++rows)
 	{
-        auto rows = (*it);
+        //auto rows = (*it);
 		std::vector<int> indexes;
 		for (int i = 0; i < size / rows; ++i)
 			indexes.push_back(i);
-
-		std::vector<std::string> pqr(size / rows);
-		for (int i = 0; i < size / rows; ++i)
+		auto columns = std::ceil((double)size / rows);
+		std::vector<std::string> xyz(rows);
+		for (auto i = 0; i < str.size(); ++i)
 		{
-			for (int j = 0; j < rows; ++j)
-				pqr[i] += str[i + j*(size/ rows)];
+			//xyz
+		}
+
+		std::vector<std::string> pqr(columns);
+		for (int i = 0; i < columns; ++i)
+		{
+			for (int j = 0; (j < rows) && ((i + j*(columns)) < str.size()); ++j)
+				pqr[i] += str[i + j*(columns)];
 		}
 		
 		while (std::next_permutation(indexes.begin(), indexes.end()))
@@ -325,3 +332,54 @@ int crypto::get_scores(const std::string& str, std::map<std::string, size_t> &me
 
 	return std::max(ret, get_scores(str, memo, pos+1));
 }
+
+void crypto::columnar_decryption(std::string cipher)
+{
+	static int count = 0;
+	std::ofstream file("perms.txt", std::ofstream::app);	
+	scores ord, writer;
+	for (int columns = 1; columns <= 3; columns++)
+	{
+		std::vector<size_t> indexes;
+		for (int i = 0; i < columns; ++i)
+			indexes.push_back(i);
+		int rows = cipher.size() / columns;
+		int extra = cipher.size() % columns;
+		std::vector<std::string> pqr(indexes.size());
+		while (std::next_permutation(indexes.begin(), indexes.end()))
+		{
+			int start = 0;
+			int end;
+			for (int i = 0; i < columns; ++i)
+			{
+				end = rows + (extra > indexes[i]);
+				pqr[indexes[i]] = cipher.substr(start, end);
+				start += end;
+			}
+			std::string word;
+			for (int i = 0; i < rows + (extra > 0); ++i)
+			{
+				auto offset = i*columns;
+				for (int j = 0; j < columns; ++j)
+				{
+					auto index = j + offset;
+					if (index < cipher.size())
+						word += pqr[j][i];
+				}
+			}
+			auto score = get_scores(word);
+			if (ord.find(word) != ord.end())
+				ord[word] = std::max(ord[word], score);
+			else
+				ord[word] = score;
+		} // end while			
+		writer = top(ord, writer, 1000);		
+	}
+	auto ret = flip_map(writer);
+	for (auto it = ret.begin(); it != ret.end(); ++it)
+		file << it->first << " " << it->second << std::endl;
+	file.close();
+	++count;
+	printf("Finished %d \n", count);
+}
+
