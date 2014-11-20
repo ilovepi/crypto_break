@@ -55261,12 +55261,10 @@ livre
 livres
 lizard
 lizards
-ll
 llama
 llamas
 llano
 llanos
-lo
 loach
 loaches
 load

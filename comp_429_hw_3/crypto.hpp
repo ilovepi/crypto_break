@@ -13,7 +13,7 @@
 
 class crypto
 {
-
+public:
 	typedef std::pair<int, std::string> score;
 	typedef std::map<std::string, int> scores;
 	typedef std::pair<std::string, int> map_key;
@@ -49,15 +49,7 @@ private:
 	static scores top(scores &sub, scores &whole, size_t n);
 
 
-    /**
-    * a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
-    */
-    static bool comp(const score &x, const score &y);
-	
-	/**
-	* a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
-	*/
-	static bool comp2(map_key x, map_key y);
+   
 
 public:
     /**
@@ -115,6 +107,16 @@ public:
 	*@param cipher the cipher text as a string
 	*/
 	void columnar_decryption(std::string cipher);
+
+	/**
+	* a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
+	*/
+	static bool comp(const score &x, const score &y);
+
+	/**
+	* a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
+	*/
+	static bool comp2(map_key x, map_key y);
 
 };
 

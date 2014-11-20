@@ -62,7 +62,7 @@ bool crypto::comp(const score &x, const score &y)
 
 bool crypto::comp2(map_key x, map_key y)
 {
-	return  x.second > y.second;
+	return  x.second < y.second;
 }
 
 
@@ -73,7 +73,7 @@ void crypto::merge(scores &ret, std::vector<map_key> &other)
 		ret.insert(other.front());
 	else
 		ret[other.front().first] = std::max(other.front().second, ret[other.front().first]);
-	std::pop_heap(other.begin(), other.end());
+	std::pop_heap(other.begin(), other.end(), comp2);
 	other.pop_back();
 }
 
@@ -83,11 +83,11 @@ crypto::scores crypto::top(scores &sub, scores &whole, size_t n)
 	std::vector<std::pair<std::string, int>> whole_que, sub_que;	
 	for (auto it = whole.begin(); it != whole.end(); it++)	
 		whole_que.push_back(*it);			
-	std::make_heap(whole_que.begin(), whole_que.end());
+	std::make_heap(whole_que.begin(), whole_que.end(), comp2);
 
 	for (auto it = sub.begin(); it != sub.end(); it++)
 		sub_que.push_back(*it);
-	std::make_heap(sub_que.begin(), sub_que.end());
+	std::make_heap(sub_que.begin(), sub_que.end(), comp2);
 
 	while (ret.size() < n && !whole_que.empty()  && !sub_que.empty())
 	{		
@@ -184,7 +184,7 @@ void crypto::columnar_decryption(std::string cipher)
 	static int count = 0;
 	std::ofstream file("perms.txt", std::ofstream::app);	
 	scores ord, writer;
-	for (int columns = 3; columns <= 8; columns++)
+	for (int columns = 1; columns <= 8; columns++)
 	{
 		std::vector<size_t> indexes;
 		for (int i = 0; i < columns; ++i)

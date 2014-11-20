@@ -12,16 +12,56 @@ int main()
 	// 
 	std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 
-	
-	//solver.transpose(msg);
-	//auto mapped = solver.remapper(msg);
-	
-	//system("pause");
 
-	auto shifted = crypto::shift(msg);	
+	/*std::pair<std::string,int> item;
+	std::ifstream file("perms.txt");
+	std::vector<std::pair<std::string, int>> heap;
+	while (file.peek() != EOF)
+	{
+		file >> item.second >> item.first;
+		heap.push_back(item);
+	}
+
+	for (auto it : heap)
+		std::cout << it.first << " : " << it.second << std::endl;
+	std::cout << std::endl;
+
+	std::make_heap(heap.begin(), heap.end(), crypto::comp2);
+	for (auto it : heap)
+		std::cout << it.first << " : " << it.second << std::endl;
+	std::cout << std::endl;
+
+	std::pop_heap(heap.begin(), heap.end(), crypto::comp2);
+	for (auto it : heap)
+		std::cout << it.first << " : " << it.second << std::endl;
+	std::cout << std::endl;
 	
 	
-	solver.columnar_decryption(shifted[22]);
+
+	/*
+	std::vector<int> x = {5,7,2,1,9,6,3,11,22,59};
+	for (auto item : x)
+		std::cout << item << " ";
+	std::cout << std::endl;
+
+	std::make_heap(x.begin(), x.end());
+	for (auto item : x)
+		std::cout << item << " ";
+	std::cout << std::endl;
+
+	std::pop_heap(x.begin(), x.end());
+	for (auto item : x)
+		std::cout << item << " ";
+	std::cout << std::endl;
+
+	/**/
+
+	
+
+	//auto shifted = crypto::shift(msg);	
+	
+	solver.columnar_decryption(msg);
+	//solver.columnar_decryption(shifted[22]);
 	/*for (auto item : shifted)
 	{
 		auto freqs = solver.freq_list(item);
