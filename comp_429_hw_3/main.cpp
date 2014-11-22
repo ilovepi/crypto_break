@@ -18,7 +18,7 @@ int main()
 	//If that failed I would just let all 26 run
 	solver.columnar_decryption(shifted[22]);
 
-	/*for (auto it = shifted.begin(); it != shifted.end(); ++it)		
+	/*for (auto it = shifted.begin(); it != shifted.end(); ++it)	// as back up try all the shifts	
 		solver.columnar_decryption(*it);
 	/**/
 		
