@@ -126,6 +126,7 @@
     <Text Include="dictionary.txt" />
     <Text Include="memo.txt" />
     <Text Include="perms.txt" />
+    <Text Include="perms_decrypted.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crypto.hpp" />
