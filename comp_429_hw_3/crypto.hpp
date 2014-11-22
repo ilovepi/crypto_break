@@ -26,25 +26,25 @@ public:
 
 
 	/**
-	*  Basic destructor. It useed to write out to file, now does nothing (no dynamic memory to clean up.)
+	*  Basic destructor. It used to write out to file, now does nothing (no dynamic memory to clean up.)
 	*/
 	~crypto();
 
 	/**
 	* shift cipher
-	* @return a vector with all possible shift ciphers of the input string (onlly 26)
+	* @return a vector with all possible shift ciphers of the input string (only 26)
 	*/
 	static std::vector<std::string> shift(const std::string& str);
 
 
 	/**
-	* @return the frequency distriubution of characters in the string
-	* @param str the string to analy the frequency distribution on
+	* @return the frequency distribution of characters in the string
+	* @param str the string to analyze the frequency distribution on
 	*/
 	static std::vector<int> get_freq(const std::string& str);
 
 	/**
-	* @return the list of the times a characters appears in strign s
+	* @return the list of the times a characters appears in string s
 	* @param s a string to check the frequency distribution of characters 
 	*/
 	static scores freq_list(const std::string& s);
@@ -72,7 +72,7 @@ public:
 
 
 	/**
-	* a basic comparitor for score. compares the integer portion of 2 std::pair<int std::string>
+	* a basic comparator for score. compares the integer portion of 2 std::pair<int std::string>
 	* @return true if x.second < y.second
 	*/
 	static bool comp_map_key(map_key x, map_key y);
@@ -91,7 +91,7 @@ private:
 		
 	/**
 	* increments a character (only works with lower case)
-	* @return a character incremented by 1 and moded by 26: 'a'+1 = b; 'z'+1 = 'a'
+	* @return a character incremented by 1 and modded by 26: 'a'+1 = b; 'z'+1 = 'a'
 	*/
 	static char incr(char c);
 
