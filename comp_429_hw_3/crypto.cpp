@@ -133,7 +133,7 @@ int crypto::get_scores(const std::string& str, std::map<std::string, size_t> &me
 		//unlock memo
 		while (m <= (str.size() - pos))
 		{	
-			//look up the substrings in the dictionary
+			//look up the substring in the dictionary
 			if (dict.find(window) != dict.end())
 			{
 				//if we find them, give them a score and look at the rest of the string for more words
@@ -141,7 +141,7 @@ int crypto::get_scores(const std::string& str, std::map<std::string, size_t> &me
 				if (ret < temp)
 					ret = temp;
 			}
-			++m;//increase the windw size
+			++m;//increase the window size
 			window = str.substr(pos, m);//update window to be the proper substring									
 		}
 		
@@ -174,7 +174,7 @@ void crypto::columnar_decryption(std::string cipher)
 		for (int i = 0; i < columns; ++i)
 			indexes.push_back(i);
 		
-		//number of columns for all rows(integer devision is ok here)
+		//number of columns for all rows(integer division is ok here)
 		int rows = cipher.size() / columns;
 		
 		//number of columns that will be in the final row (if it exists)
